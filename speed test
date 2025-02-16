@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Test</title>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #1a1a40, #4b0082); 
+            color: #ffffff; 
+            text-align: center; 
+            font-family: 'Arial', sans-serif; 
+            padding: 20px; 
+        }
+        h2 { 
+            font-size: 30px; 
+            margin-bottom: 20px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button { 
+            padding: 14px 28px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            background: linear-gradient(45deg, #ff007f, #ff6600); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            box-shadow: 0px 5px 15px rgba(255, 0, 127, 0.5);
+            transition: 0.4s ease-in-out;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        button:hover { 
+            background: linear-gradient(45deg, #ff6600, #ff007f); 
+            box-shadow: 0px 10px 25px rgba(255, 0, 127, 0.8);
+            transform: scale(1.1);
+        }
+        #result { 
+            margin-top: 20px; 
+            font-size: 24px; 
+            font-weight: bold; 
+            padding: 20px; 
+            border-radius: 12px; 
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.3);
+            display: inline-block;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .show { 
+            opacity: 1;
+            transform: scale(1);
+        }
+        .loading {
+            font-size: 20px;
+            animation: blink 1s infinite alternate;
+        }
+        @keyframes blink {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h2>🚀 Ultra Fast Internet Speed Test</h2>
+    <button onclick="startSpeedTest()">Start Test</button>
+    <div id="result"></div>
+
+    <script>
+        function startSpeedTest() {
+            let startTime, endTime;
+            let downloadSize = 5 * 1024 * 1024; // 5MB file
+            let testFile = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Dummy_File_5MB.jpg"; 
+
+            document.getElementById("result").innerHTML = "<span class='loading'>Testing... ⏳</span>";
+            document.getElementById("result").classList.remove("show");
+
+            startTime = new Date().getTime();
+            fetch(testFile, { method: 'GET', cache: 'no-cache' })
+                .then(response => response.blob())
+                .then(() => {
+                    endTime = new Date().getTime();
+                    let duration = (endTime - startTime) / 1000; // in seconds
+                    let speedMbps = (downloadSize / (1024 * 1024) / duration).toFixed(2);
+                    document.getElementById("result").innerText = "⚡ Download Speed: " + speedMbps + " Mbps";
+                    document.getElementById("result").classList.add("show");
+                })
+                .catch(() => {
+                    document.getElementById("result").innerText = "❌ Speed test failed. Try again.";
+                    document.getElementById("result").classList.add("show");
+                });
+        }
+    </script>
+</body>
+</html>
